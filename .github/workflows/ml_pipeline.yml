@@ -39,18 +39,18 @@ jobs:
       run: |
         . venv/bin/activate
         pip install kaggle  # Install Kaggle CLI in the virtual environment
-        kaggle --version  # Check if Kaggle CLI is installed
+        python -m kaggle --version  # Check if Kaggle CLI is installed by running it as a module
 
     - name: Verify Kaggle installation
       run: |
         . venv/bin/activate
         which kaggle  # Ensure the correct `kaggle` command is available
-        kaggle --version  # Confirm the version of Kaggle CLI
+        python -m kaggle --version  # Confirm the version of Kaggle CLI using python -m
 
     - name: Download dataset from Kaggle
       run: |
         . venv/bin/activate
-        kaggle datasets download -d "sartajbhuvaji/brain-tumor-classification-mri" -p "./data"
+        python -m kaggle datasets download -d "sartajbhuvaji/brain-tumor-classification-mri" -p "./data"
 
     - name: Unzip dataset
       run: |
