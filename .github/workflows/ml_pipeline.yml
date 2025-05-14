@@ -1,0 +1,49 @@
+name: Brain Tumour Detection ML Pipeline
+
+on:
+  push:
+    branches:
+      - main  # This triggers the workflow when pushing to the main branch
+  pull_request:
+    branches:
+      - main  # This triggers the workflow for PRs targeting the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Using the latest Ubuntu runner on GitHub Actions
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'  # Specify the Python version you want to use
+
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        . venv/bin/activate
+        pip install -r requirements.txt
+
+    - name: Execute classification notebook
+      run: |
+        . venv/bin/activate
+        jupyter nbconvert --to notebook --execute classification.ipynb --output classification_output.ipynb
+
+    - name: Execute resUnet notebook
+      run: |
+        . venv/bin/activate
+        jupyter nbconvert --to notebook --execute resUnet.ipynb --output resUnet_output.ipynb
+
+    - name: Run tests
+      run: |
+        . venv/bin/activate
+        pytest  # Assuming you have pytest installed and tests are set up
+
+    - name: Save Model
+      run: |
+        . venv/bin/activate
+        mkdir -p models
+        python save_model.py  # Replace this with your model saving script
