@@ -39,6 +39,13 @@ jobs:
       run: |
         . venv/bin/activate
         pip install kaggle  # Install Kaggle CLI in the virtual environment
+        kaggle --version  # Check if Kaggle CLI is installed
+
+    - name: Verify Kaggle installation
+      run: |
+        . venv/bin/activate
+        which kaggle  # Ensure the correct `kaggle` command is available
+        kaggle --version  # Confirm the version of Kaggle CLI
 
     - name: Download dataset from Kaggle
       run: |
