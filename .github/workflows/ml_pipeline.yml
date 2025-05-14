@@ -23,9 +23,11 @@ jobs:
 
     - name: Install dependencies
       run: |
-        python -m venv venv
+        python3 -m venv venv
         . venv/bin/activate
-        pip install -r requirements.txt
+        python3 -m ensurepip --upgrade  # Ensures pip is installed and up to date
+        pip3 install --upgrade pip       # Ensures pip is upgraded
+        pip3 install -r requirements.txt
 
     - name: Set up Kaggle credentials
       run: |
@@ -36,7 +38,7 @@ jobs:
     - name: Download dataset from Kaggle
       run: |
         . venv/bin/activate
-        pip install -q kaggle
+        pip3 install -q kaggle
         kaggle datasets download -d "sartajbhuvaji/brain-tumor-classification-mri" -p "./data"
 
     - name: Unzip dataset
