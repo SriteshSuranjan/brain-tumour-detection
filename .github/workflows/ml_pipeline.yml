@@ -25,8 +25,8 @@ jobs:
       run: |
         python3 -m venv venv
         . venv/bin/activate
-        python3 -m ensurepip --upgrade  # Ensures pip is installed and up to date
-        python3 -m pip install --upgrade pip  # Ensure pip3 is upgraded
+        python3 -m ensurepip --upgrade  # Ensure pip is installed and up-to-date
+        python3 -m pip install --upgrade pip  # Upgrade pip3 to the latest version
         pip install -r requirements.txt  # Install dependencies from requirements.txt
 
     - name: Set up Kaggle credentials
@@ -39,34 +39,34 @@ jobs:
       run: |
         . venv/bin/activate
         pip install kaggle  # Install Kaggle CLI in the virtual environment
-        python -m kaggle --version  # Check if Kaggle CLI is installed by running it as a module
+        python -m kaggle --version  # Check if Kaggle CLI is installed and print the version
 
     - name: Verify Kaggle installation
       run: |
         . venv/bin/activate
-        which kaggle  # Ensure the correct `kaggle` command is available
+        which kaggle  # Ensure the `kaggle` command is available
         python -m kaggle --version  # Confirm the version of Kaggle CLI using python -m
 
     - name: Download dataset from Kaggle
       run: |
         . venv/bin/activate
-        python -m kaggle datasets download -d "sartajbhuvaji/brain-tumor-classification-mri" -p "./data"
+        python -m kaggle datasets download -d "sartajbhuvaji/brain-tumor-classification-mri" -p "./data"  # Download the dataset
 
     - name: Unzip dataset
       run: |
-        unzip ./data/brain-tumor-classification-mri.zip -d ./data
+        unzip ./data/brain-tumor-classification-mri.zip -d ./data  # Unzip the downloaded dataset
 
     - name: Execute classification notebook
       run: |
         . venv/bin/activate
-        jupyter nbconvert --to notebook --execute classification.ipynb --output classification_output.ipynb
+        jupyter nbconvert --to notebook --execute classification.ipynb --output classification_output.ipynb  # Execute the classification notebook
 
     - name: Execute resUnet notebook
       run: |
         . venv/bin/activate
-        jupyter nbconvert --to notebook --execute resUnet.ipynb --output resUnet_output.ipynb
+        jupyter nbconvert --to notebook --execute resUnet.ipynb --output resUnet_output.ipynb  # Execute the resUnet notebook
 
     - name: Run tests
       run: |
         . venv/bin/activate
-        pytest
+        pytest  # Run tests using pytest
