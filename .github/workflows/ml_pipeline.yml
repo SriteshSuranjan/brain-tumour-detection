@@ -3,14 +3,14 @@ name: Brain Tumour Detection ML Pipeline
 on:
   push:
     branches:
-      - main  # This triggers the workflow when pushing to the main branch
+      - main
   pull_request:
     branches:
-      - main  # This triggers the workflow for PRs targeting the main branch
+      - main
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Using the latest Ubuntu runner on GitHub Actions
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Code
@@ -19,13 +19,29 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.9'  # Specify the Python version you want to use
+        python-version: '3.9'
 
     - name: Install dependencies
       run: |
         python -m venv venv
         . venv/bin/activate
         pip install -r requirements.txt
+
+    - name: Set up Kaggle credentials
+      run: |
+        mkdir -p ~/.kaggle
+        echo "${{ secrets.KAGGLE_JSON }}" > ~/.kaggle/kaggle.json
+        chmod 600 ~/.kaggle/kaggle.json
+
+    - name: Download dataset from Kaggle
+      run: |
+        . venv/bin/activate
+        pip install -q kaggle
+        kaggle datasets download -d "sartajbhuvaji/brain-tumor-classification-mri" -p "./data"
+
+    - name: Unzip dataset
+      run: |
+        unzip ./data/brain-tumor-classification-mri.zip -d ./data
 
     - name: Execute classification notebook
       run: |
@@ -40,10 +56,4 @@ jobs:
     - name: Run tests
       run: |
         . venv/bin/activate
-        pytest  # Assuming you have pytest installed and tests are set up
-
-    - name: Save Model
-      run: |
-        . venv/bin/activate
-        mkdir -p models
-        python save_model.py  # Replace this with your model saving script
+        pytest
